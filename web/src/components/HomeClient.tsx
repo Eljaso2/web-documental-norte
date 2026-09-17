@@ -197,6 +197,7 @@ export function HomeClient({ counts, hero }: HomeClientProps) {
       <div className="about-section">
         <div className="about-grid">
           <div className="about-image-col">
+            <img src="/el-proyecto.png" alt="El proyecto" className="about-image" />
             <div className="about-caption">
               Archivo documental del Seminario Permanente de Historia del Norte de Santa Fe.
             </div>
