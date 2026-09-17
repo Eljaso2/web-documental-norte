@@ -325,7 +325,7 @@ img { max-width: 100%; height: auto; }
 }
 .hero-featured-image img {
   position: absolute;
-  top: calc(-1 * var(--topbar-height) + 2rem);
+  top: calc(-1 * var(--topbar-height) + 4rem);
   right: 0;
   width: 100%;
   height: calc(100% + var(--topbar-height) + 5%);
