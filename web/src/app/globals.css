@@ -269,7 +269,7 @@ img { max-width: 100%; height: auto; }
   display: flex;
   flex-direction: column;
   justify-content: center;
-  padding: 3rem 3rem 4rem var(--pad-x);
+  padding: 2rem 3rem 4rem var(--pad-x);
   padding-left: calc((100% - var(--max-w)) / 2 + var(--pad-x));
   padding-left: max(var(--pad-x), calc((100% - 1370px) / 2 + var(--pad-x)));
 }
@@ -283,7 +283,7 @@ img { max-width: 100%; height: auto; }
   margin-bottom: 0.75rem;
 }
 .hero-featured-title {
-  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-size: clamp(1.85rem, 3.7vw, 3.2rem);
   font-weight: 800;
   line-height: 1.05;
   letter-spacing: -0.02em;
@@ -325,10 +325,10 @@ img { max-width: 100%; height: auto; }
 }
 .hero-featured-image img {
   position: absolute;
-  top: calc(-1 * var(--topbar-height) + 4rem);
+  top: calc(-1 * var(--topbar-height));
   right: 0;
   width: 100%;
-  height: calc(80% + var(--topbar-height) - 4rem);
+  height: calc(85% + var(--topbar-height));
   object-fit: cover;
   object-position: center top;
   transform: rotate(3deg);
@@ -364,8 +364,8 @@ img { max-width: 100%; height: auto; }
 .explore-section {
   max-width: var(--max-w);
   margin: 0 auto;
-  padding: 2rem var(--pad-x);
-  padding-top: 1.5rem;
+  padding: 1.5rem var(--pad-x);
+  padding-top: 1rem;
 }
 .explore-title {
   font-size: 2.5rem;
