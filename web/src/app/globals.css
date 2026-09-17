@@ -254,7 +254,7 @@ img { max-width: 100%; height: auto; }
 /* --- Hero Destacado (fondo liso izq + imagen diagonal der) --- */
 .hero-featured {
   width: 100%;
-  min-height: 70vh;
+  min-height: 73.5vh;
   position: relative;
   background-color: #f8f9fa;
   overflow: visible;
@@ -321,14 +321,14 @@ img { max-width: 100%; height: auto; }
   flex: 0 0 50%;
   max-width: 50%;
   overflow: visible;
-  z-index: 1;
+  z-index: 101;
 }
 .hero-featured-image img {
   position: absolute;
   top: calc(-1 * var(--topbar-height));
   right: 0;
   width: 100%;
-  height: calc(85% + var(--topbar-height));
+  height: 95%;
   object-fit: cover;
   object-position: center top;
   transform: rotate(3deg);

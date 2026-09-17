@@ -150,7 +150,7 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
 
         {/* Description */}
         {doc.descripcion && (
-          <div style={{ fontSize: '1rem', lineHeight: 1.7, color: '#495057', maxWidth: '72ch', marginBottom: '2rem' }}>
+          <div style={{ fontSize: '1rem', lineHeight: 1.7, color: '#495057', marginBottom: '2rem' }}>
             {doc.descripcion}
           </div>
         )}
