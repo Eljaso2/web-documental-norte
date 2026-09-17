@@ -254,7 +254,7 @@ img { max-width: 100%; height: auto; }
 /* --- Hero Destacado (fondo liso izq + imagen diagonal der) --- */
 .hero-featured {
   width: 100%;
-  min-height: 73.5vh;
+  min-height: 70vh;
   position: relative;
   z-index: 101;
   background-color: #f8f9fa;
