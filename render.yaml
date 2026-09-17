@@ -5,7 +5,7 @@ services:
     plan: starter
     rootDir: .
     buildCommand: npm install --workspace=web && npm run build --workspace=web
-    startCommand: HOSTNAME=0.0.0.0 node web/.next/standalone/web-documental/web/server.js
+    startCommand: cd web && HOSTNAME=0.0.0.0 npm start
     envVars:
       - key: NEXT_PUBLIC_SANITY_PROJECT_ID
         value: 06aqvaal

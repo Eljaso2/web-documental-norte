@@ -4,8 +4,8 @@
   "private": true,
   "scripts": {
     "dev": "next dev",
-    "build": "next build && cp -r public .next/standalone/web-documental/web/public && cp -r .next/static .next/standalone/web-documental/web/.next/static",
-    "start": "HOSTNAME=0.0.0.0 node .next/standalone/web-documental/web/server.js",
+    "build": "next build && STANDALONE=$(find .next/standalone -name server.js -not -path '*/node_modules/*' | head -1 | xargs dirname) && cp -r public $STANDALONE/public && cp -r .next/static $STANDALONE/.next/static && echo \"Standalone at: $STANDALONE\"",
+    "start": "HOSTNAME=0.0.0.0 node $(find .next/standalone -name server.js -not -path '*/node_modules/*' | head -1)",
     "lint": "eslint"
   },
   "dependencies": {
