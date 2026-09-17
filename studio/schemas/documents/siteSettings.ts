@@ -11,35 +11,15 @@ export default defineType({
       title: 'Documento destacado',
       type: 'reference',
       to: [{ type: 'documento' }],
-      description: 'Documento que aparece en la portada del sitio. Solo uno a la vez.',
+      description: 'Documento que aparece en la portada del sitio. Solo uno a la vez. El título, bajada y referencia se toman del documento.',
       validation: (Rule) => Rule.required(),
     }),
     defineField({
-      name: 'destacadoVolanta',
-      title: 'Volanta',
-      type: 'string',
-      description: 'Texto chico arriba del título (ej: "Archivo destacado", "Fuentes primarias"). Si queda vacío, usa "Archivo destacado".',
-      initialValue: 'Archivo destacado',
-    }),
-    defineField({
-      name: 'destacadoTitulo',
-      title: 'Título',
-      type: 'string',
-      description: 'Título del destacado. Si queda vacío, usa el título del documento.',
-    }),
-    defineField({
-      name: 'destacadoBajada',
-      title: 'Bajada',
-      type: 'text',
-      rows: 3,
-      description: 'Descripción corta debajo del título. Si queda vacía, usa la descripción del documento.',
-    }),
-    defineField({
       name: 'destacadoImagen',
-      title: 'Imagen',
+      title: 'Imagen del destacado',
       type: 'image',
       options: { hotspot: true },
-      description: 'Imagen del destacado en la portada. Si queda vacía, usa la primera imagen del documento.',
+      description: 'Imagen con tratamiento de color para la portada. TIENE PRIORIDAD sobre la imagen de portada del documento. Si queda vacía, usa la imagen de portada del documento.',
     }),
 
     // === CATÁLOGO: Documento destacado ===
@@ -90,16 +70,14 @@ export default defineType({
   ],
   preview: {
     select: {
-      volanta: 'destacadoVolanta',
-      titulo: 'destacadoTitulo',
       documentoTitulo: 'destacadoDocumento.titulo',
       catTitulo: 'catalogoDestacadoTitulo',
       catDocTitulo: 'catalogoDestacadoDocumento.titulo',
     },
-    prepare({ volanta, titulo, documentoTitulo, catTitulo, catDocTitulo }: {
-      volanta?: string; titulo?: string; documentoTitulo?: string; catTitulo?: string; catDocTitulo?: string
+    prepare({ documentoTitulo, catTitulo, catDocTitulo }: {
+      documentoTitulo?: string; catTitulo?: string; catDocTitulo?: string
     }) {
-      const homeTitle = titulo || documentoTitulo || 'Sin destacado'
+      const homeTitle = documentoTitulo || 'Sin destacado'
       const catTitle = catTitulo || catDocTitulo
       return {
         title: homeTitle,

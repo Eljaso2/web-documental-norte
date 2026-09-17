@@ -292,10 +292,10 @@ img { max-width: 100%; height: auto; }
   margin-bottom: 1rem;
 }
 .hero-featured-bajada {
-  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  font-size: clamp(1.05rem, 1.4vw, 1.25rem);
   color: #6c757d;
-  max-width: 50ch;
-  line-height: 1.6;
+  max-width: 60ch;
+  line-height: 1.65;
   margin-bottom: 1.5rem;
 }
 .hero-featured-btn {
@@ -326,11 +326,11 @@ img { max-width: 100%; height: auto; }
 .hero-featured-image img {
   position: absolute;
   top: calc(-1 * var(--topbar-height));
-  right: -10%;
-  width: 120%;
+  right: 0;
+  width: 100%;
   height: calc(100% + var(--topbar-height) + 5%);
   object-fit: cover;
-  object-position: 50% 20%;
+  object-position: center top;
   transform: rotate(3deg);
   box-shadow: -8px 8px 30px rgba(0,0,0,0.2);
 }

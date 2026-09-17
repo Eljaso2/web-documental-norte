@@ -82,15 +82,13 @@ export const COUNTS = `{
 }`
 
 export const SITE_SETTINGS = `*[_id == "site-settings"][0] {
-  destacadoVolanta,
-  destacadoTitulo,
-  destacadoBajada,
   "destacadoImagen": destacadoImagen {
     asset->{ _id, url, metadata { dimensions } },
     hotspot
   },
   "destacadoDocumento": destacadoDocumento->{
     _id, titulo, slug, descripcion,
+    destacadoVolanta, destacadoTitulo, destacadoBajada,
     "imagenPortada": imagenPortada{ asset->{ _id, url, metadata { dimensions } } },
     "archivos": archivos[]{ asset->{ _id, url, metadata { dimensions }, mimeType } }
   },

@@ -5,9 +5,6 @@ import { icons } from './Icons'
 import { urlFor } from '@/lib/sanity'
 
 interface HeroData {
-  destacadoVolanta?: string
-  destacadoTitulo?: string
-  destacadoBajada?: string
   destacadoImagen?: {
     asset?: { _id: string; url: string; metadata?: { dimensions?: { width: number; height: number } } }
     hotspot?: any
@@ -17,6 +14,9 @@ interface HeroData {
     titulo: string
     slug: { current: string }
     descripcion?: string
+    destacadoVolanta?: string
+    destacadoTitulo?: string
+    destacadoBajada?: string
     imagenPortada?: {
       asset?: { _id: string; url: string; metadata?: { dimensions?: { width: number; height: number } } }
     }
@@ -90,30 +90,30 @@ const sections = [
   },
 ]
 
-/* Resolve hero image URL — priority: imagenPortada > first image in archivos > first PDF > custom destacadoImagen */
+/* Resolve hero image URL — priority: destacadoImagen (siteSettings, color-treated) > imagenPortada > first image in archivos > first PDF */
 function getHeroImageUrl(hero: HeroData): string | null {
+  // 1. Custom destacadoImagen from siteSettings (color-treated, HIGHEST priority)
+  if (hero.destacadoImagen?.asset?.url) {
+    return urlFor(hero.destacadoImagen).width(900).height(1260).fit('crop').crop('top').url()
+  }
   const doc = hero.destacadoDocumento
-  // 1. imagenPortada from the document (curated thumbnail)
+  // 2. imagenPortada from the document (curated thumbnail)
   if (doc?.imagenPortada?.asset?.url) {
     return urlFor(doc.imagenPortada).width(900).height(1260).fit('crop').crop('top').url()
   }
-  // 2. First image in archivos (skip PDFs)
+  // 3. First image in archivos (skip PDFs)
   const firstImage = doc?.archivos?.find(a =>
     a.asset?.metadata?.mimeType?.startsWith('image/')
   )
   if (firstImage?.asset?.url) {
     return urlFor(firstImage).width(900).height(1260).fit('crop').crop('top').url()
   }
-  // 3. First PDF — Sanity auto-generates a thumbnail of page 1
+  // 4. First PDF — Sanity auto-generates a thumbnail of page 1
   const firstPdf = doc?.archivos?.find(a =>
     a.asset?.metadata?.mimeType === 'application/pdf'
   )
   if (firstPdf?.asset?.url) {
     return `${firstPdf.asset.url}?w=900&h=1260&fit=crop`
-  }
-  // 4. Custom destacadoImagen (manual override, last resort)
-  if (hero.destacadoImagen?.asset?.url) {
-    return urlFor(hero.destacadoImagen).width(900).height(1260).fit('crop').crop('top').url()
   }
   return null
 }
@@ -129,13 +129,13 @@ export function HomeClient({ counts, hero }: HomeClientProps) {
         <div className="hero-featured">
           <div className="hero-featured-text">
             <span className="hero-featured-volanta">
-              {hero.destacadoVolanta || 'Archivo destacado'}
+              {doc.destacadoVolanta || 'Archivo destacado'}
             </span>
             <h1 className="hero-featured-title">
-              {hero.destacadoTitulo || doc.titulo}
+              {doc.destacadoTitulo || doc.titulo}
             </h1>
             <p className="hero-featured-bajada">
-              {hero.destacadoBajada || doc.descripcion}
+              {doc.destacadoBajada || doc.descripcion}
             </p>
             <Link href={`/documento/${doc.slug.current}`} className="hero-featured-btn">
               Explorá este documento
@@ -143,7 +143,7 @@ export function HomeClient({ counts, hero }: HomeClientProps) {
           </div>
           {heroImageUrl && (
             <div className="hero-featured-image">
-              <img src={heroImageUrl} alt={hero.destacadoTitulo || doc.titulo} />
+              <img src={heroImageUrl} alt={doc.destacadoTitulo || doc.titulo} />
             </div>
           )}
         </div>

@@ -157,6 +157,51 @@ export default defineType({
       of: [{ type: 'actorConRol' }],
       description: 'Personas u organizaciones con rol en la producción o contenido del documento',
     }),
+    // === PRESENTACIÓN PARA DESTACADO ===
+    defineField({
+      name: 'destacadoVolanta',
+      title: 'Volanta del destacado',
+      type: 'string',
+      description: 'Texto chico arriba del título cuando el documento se destaca (ej: "Archivo destacado", "Fuentes primarias").',
+      initialValue: 'Archivo destacado',
+    }),
+    defineField({
+      name: 'destacadoTitulo',
+      title: 'Título del destacado',
+      type: 'string',
+      description: 'Título narrativo para cuando el documento se destaca. Si queda vacío, usa el título del documento.',
+    }),
+    defineField({
+      name: 'destacadoBajada',
+      title: 'Bajada del destacado',
+      type: 'text',
+      rows: 5,
+      description: 'Descripción narrativa cuando el documento se destaca. Si queda vacía, usa la descripción ISAD-G.',
+    }),
+    defineField({
+      name: 'destacadoRefAutor',
+      title: 'Para saber más — Autor',
+      type: 'string',
+      description: 'Autor de la obra fuente (ej: "Gori, Gastón").',
+    }),
+    defineField({
+      name: 'destacadoRefObra',
+      title: 'Para saber más — Obra',
+      type: 'string',
+      description: 'Título de la obra fuente (ej: "La Forestal: la tragedia del quebracho colorado").',
+    }),
+    defineField({
+      name: 'destacadoRefAnio',
+      title: 'Para saber más — Año',
+      type: 'string',
+      description: 'Año de publicación (ej: "1965", "c. 1964").',
+    }),
+    defineField({
+      name: 'destacadoRefPaginas',
+      title: 'Para saber más — Página/s',
+      type: 'string',
+      description: 'Página o rango de páginas (ej: "p. 45", "pp. 45-52").',
+    }),
     // Digital assets
     defineField({
       name: 'imagenPortada',
