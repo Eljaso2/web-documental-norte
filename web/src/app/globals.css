@@ -1,0 +1,870 @@
+/* ============================================
+   HISTORIA DEL NORTE — Design System
+   Exact replica of Digital Benin (digitalbenin.org)
+   ============================================ */
+
+/* --- Design tokens (Digital Benin exact palette) --- */
+:root {
+  /* Primary bronze/gold */
+  --primary: #a08841;
+  --primary-light: #a18941;
+  --primary-dark: #705b28;
+  --primary-hover: #c7b88d;
+  --primary-bg-subtle: #ece7d9;
+  --primary-border-subtle: #d9cfb3;
+  --primary-text-emphasis: #40361a;
+
+  /* Neutrals */
+  --black: #000000;
+  --white: #ffffff;
+  --gray-100: #f8f9fa;
+  --gray-200: #e9ecef;
+  --gray-300: #dee2e6;
+  --gray-400: #ced4da;
+  --gray-500: #adb5bd;
+  --gray-600: #6c757d;
+  --gray-700: #495057;
+  --gray-800: #343a40;
+  --gray-900: #212529;
+
+  /* Layout */
+  --topbar-height: 56px;
+  --max-w: 1370px;
+  --pad-x: clamp(1rem, 3vw, 2.5rem);
+
+  /* Typography — system-ui stack (matches Digital Benin / Bootstrap 5.3.2) */
+  --font-sans: system-ui, -apple-system, 'Segoe UI', Roboto, 'Helvetica Neue', 'Noto Sans', 'Liberation Sans', Arial, sans-serif;
+  --font-serif: 'Georgia', 'Times New Roman', serif;
+
+  /* Badge colors for document types */
+  --tag-ley: #2D5F3E;
+  --tag-decreto: #1A4A6E;
+  --tag-resolucion: #4A3B8F;
+  --tag-medida: #8B6914;
+  --tag-protesta: #8B1A1A;
+  --tag-propuesta: #1A6B6B;
+  --tag-nota: #6B4A2A;
+  --tag-informe: #5A3B8F;
+  --tag-bg-ley: #E8F2EB;
+  --tag-bg-decreto: #E0EDF5;
+  --tag-bg-resolucion: #EDE9F7;
+  --tag-bg-medida: #F5EED4;
+  --tag-bg-protesta: #F5E0E0;
+  --tag-bg-propuesta: #E0F2F2;
+  --tag-bg-nota: #F2EAE0;
+  --tag-bg-informe: #EDE9F7;
+}
+
+/* --- Base reset --- */
+*, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+html { height: 100%; scroll-behavior: smooth; }
+html, body { max-width: 100vw; overflow-x: hidden; }
+
+body {
+  font-family: var(--font-sans);
+  font-size: 1rem;
+  font-weight: 400;
+  line-height: 1.5;
+  color: var(--gray-900);
+  background: var(--white);
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+  min-height: 100%;
+}
+
+::selection { background: var(--primary); color: var(--white); }
+
+a { color: var(--primary); text-decoration: none; transition: color 0.15s ease; }
+a:hover { color: var(--primary-dark); }
+
+img { max-width: 100%; height: auto; }
+
+/* --- Progress bar (Digital Benin uses nprogress #a08841) --- */
+.progress-bar { background: var(--primary-light) !important; }
+
+/* --- Margin/padding for topbar --- */
+.margin-topbar { margin-top: var(--topbar-height); }
+.padding-topbar { padding-top: var(--topbar-height); }
+
+/* --- Navbar (Digital Benin exact) --- */
+.navbar {
+  position: fixed;
+  top: 0;
+  left: 0;
+  right: 0;
+  z-index: 100;
+  min-height: var(--topbar-height);
+  background: var(--black);
+  padding: 0.5rem 0;
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+}
+.navbar-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 0 var(--pad-x);
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  width: 100%;
+}
+.navbar-brand {
+  color: var(--white);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+  flex-shrink: 0;
+}
+.navbar-brand:hover { color: var(--white); }
+.navbar-brand img { height: 36px; width: auto; }
+.navbar-section-title {
+  color: var(--white);
+  font-size: 1rem;
+  font-weight: 400;
+  display: none;
+}
+@media (min-width: 768px) {
+  .navbar-section-title { display: block; }
+}
+.navbar-menu-btn {
+  background: none;
+  border: none;
+  color: var(--white);
+  text-decoration: none;
+  display: flex;
+  align-items: center;
+  gap: 0.6rem;
+  cursor: pointer;
+  font-family: var(--font-sans);
+  font-size: 0.8rem;
+  font-weight: 700;
+  letter-spacing: 0.15em;
+  text-transform: uppercase;
+  padding: 0.4rem 0.9rem;
+  border-radius: 0;
+  transition: background 0.15s, border-color 0.15s;
+}
+.navbar-menu-btn:hover { color: var(--primary-hover); }
+.navbar-menu-btn .menu-icon { font-size: 1rem; line-height: 1; }
+
+/* --- Menu overlay (Digital Benin full-screen gold menu) --- */
+.menu-overlay {
+  position: fixed;
+  top: calc(var(--topbar-height) - 5px);
+  left: 0;
+  right: 0;
+  bottom: 0;
+  z-index: 99;
+  background: var(--primary);
+  padding: 1.5rem;
+  overflow-y: auto;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  transition: top 0.5s ease;
+}
+.menu-overlay.menu-hidden { top: -100vh; visibility: hidden; }
+.menu-items {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: flex-start;
+}
+.menu-item {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  padding: 0.5rem;
+  color: var(--gray-900);
+  text-decoration: none;
+  overflow: hidden;
+  height: 180px;
+  width: 100%;
+}
+@media (min-width: 768px) {
+  .menu-item { padding: 1.5rem; width: 50%; }
+}
+@media (min-width: 1200px) {
+  .menu-item { width: 33.333%; }
+}
+.menu-item img {
+  width: 120px;
+  height: 120px;
+  object-fit: contain;
+  filter: invert(1);
+  flex-shrink: 0;
+}
+.menu-item .no-img {
+  width: 120px;
+  height: 120px;
+  display: grid;
+  place-items: center;
+  font-size: 3.5rem;
+  flex-shrink: 0;
+}
+@media (max-width: 768px) {
+  .menu-item { height: 160px; }
+  .menu-item img, .menu-item .no-img { width: 80px; height: 80px; }
+  .menu-item .no-img { font-size: 2.5rem; }
+}
+.menu-item:hover h4 { text-decoration: underline; }
+.menu-item h4 {
+  font-size: 1.25rem;
+  font-weight: 600;
+  margin-bottom: 0.25rem;
+  color: var(--gray-900);
+}
+.menu-item p {
+  font-size: 0.9rem;
+  color: var(--gray-900);
+  line-height: 1.4;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.menu-divider {
+  display: none;
+  width: 100%;
+  border: 0;
+  border-top: 1px solid rgba(0,0,0,0.1);
+  margin: 0.5rem 0;
+}
+@media (max-width: 768px) {
+  .menu-divider { display: block; }
+}
+.menu-about-link {
+  color: var(--gray-900);
+  text-decoration: none;
+  align-self: center;
+  margin-top: 1rem;
+}
+.menu-about-link:hover { text-decoration: underline; }
+.menu-about-link h4 { font-size: 1.25rem; font-weight: 600; }
+
+/* --- Page content --- */
+.page-content { padding-top: var(--topbar-height); min-height: 100vh; }
+.section-body {
+  padding: 3rem var(--pad-x) 5rem;
+  max-width: var(--max-w);
+  margin: 0 auto;
+}
+
+/* --- Hero Destacado (fondo liso izq + imagen diagonal der) --- */
+.hero-featured {
+  width: 100%;
+  min-height: 70vh;
+  position: relative;
+  background-color: #f8f9fa;
+  overflow: visible;
+  display: flex;
+  align-items: stretch;
+}
+.hero-featured-text {
+  position: relative;
+  z-index: 2;
+  flex: 0 0 50%;
+  max-width: 50%;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  padding: 4rem 3rem 4rem var(--pad-x);
+  padding-left: calc((100% - var(--max-w)) / 2 + var(--pad-x));
+  padding-left: max(var(--pad-x), calc((100% - 1370px) / 2 + var(--pad-x)));
+}
+.hero-featured-volanta {
+  display: inline-block;
+  font-size: 0.75rem;
+  font-weight: 700;
+  letter-spacing: 0.2em;
+  text-transform: uppercase;
+  color: #a08841;
+  margin-bottom: 0.75rem;
+}
+.hero-featured-title {
+  font-size: clamp(2rem, 4vw, 3.5rem);
+  font-weight: 800;
+  line-height: 1.05;
+  letter-spacing: -0.02em;
+  color: #212529;
+  max-width: 16ch;
+  margin-bottom: 1rem;
+}
+.hero-featured-bajada {
+  font-size: clamp(0.95rem, 1.2vw, 1.1rem);
+  color: #6c757d;
+  max-width: 50ch;
+  line-height: 1.6;
+  margin-bottom: 1.5rem;
+}
+.hero-featured-btn {
+  display: inline-block;
+  background: #a08841;
+  color: #fff;
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1.4rem;
+  border: none;
+  border-radius: 0;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+  align-self: flex-start;
+}
+.hero-featured-btn:hover {
+  background: #705b28;
+  color: #fff;
+}
+.hero-featured-image {
+  position: relative;
+  flex: 0 0 50%;
+  max-width: 50%;
+  overflow: visible;
+  z-index: 1;
+}
+.hero-featured-image img {
+  position: absolute;
+  top: calc(-1 * var(--topbar-height));
+  right: -10%;
+  width: 120%;
+  height: calc(100% + var(--topbar-height) + 5%);
+  object-fit: cover;
+  object-position: 50% 20%;
+  transform: rotate(3deg);
+  box-shadow: -8px 8px 30px rgba(0,0,0,0.2);
+}
+@media (max-width: 768px) {
+  .hero-featured {
+    flex-direction: column;
+    min-height: auto;
+  }
+  .hero-featured-text {
+    flex: none;
+    max-width: 100%;
+    padding: 3rem var(--pad-x) 2rem;
+  }
+  .hero-featured-image {
+    flex: none;
+    height: 50vh;
+    overflow: hidden;
+  }
+  .hero-featured-image img {
+    position: relative;
+    top: auto;
+    right: auto;
+    width: 100%;
+    height: 100%;
+    transform: rotate(2deg);
+    right: -5%;
+  }
+}
+
+/* --- Explore Section (card grid) --- */
+.explore-section {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 3rem var(--pad-x);
+  padding-top: 2.5rem;
+}
+.explore-title {
+  font-size: 2.5rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  margin-bottom: 1.5rem;
+}
+.card-grid {
+  display: grid;
+  grid-template-columns: repeat(1, 1fr);
+  gap: 1.5rem;
+}
+@media (min-width: 576px) { .card-grid { grid-template-columns: repeat(2, 1fr); } }
+@media (min-width: 768px) { .card-grid { grid-template-columns: repeat(3, 1fr); } }
+@media (min-width: 992px) { .card-grid { grid-template-columns: repeat(4, 1fr); } }
+
+/* --- Section Card (Digital Benin exact) --- */
+.section-card {
+  background: var(--white);
+  border: 1px solid var(--gray-300);
+  border-radius: 0;
+  overflow: hidden;
+  height: 100%;
+  transition: box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+}
+.section-card:hover {
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.25);
+}
+.section-card .card-img-header {
+  position: relative;
+  overflow: hidden;
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.075);
+}
+.section-card .card-img-header.light-primary { background: var(--primary-light); }
+.section-card .card-img-header.dark-primary { background: var(--primary-dark); }
+.doc-thumb.light-primary { background: var(--primary-light); }
+.doc-thumb.dark-primary { background: var(--primary-dark); }
+.section-card .card-img-header img {
+  width: 100%;
+  height: auto;
+  filter: invert(1);
+  display: block;
+}
+.section-card .card-img-header .icon-placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  font-size: 6rem;
+  filter: invert(1);
+}
+.section-card .card-body-inner {
+  padding: 0.5rem 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.section-card .card-body-inner .list-item {
+  padding: 0.5rem 1.25rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+.section-card .card-body-inner .list-item:last-child { border-bottom: none; flex: 1; }
+.section-card .card-title {
+  font-size: 1.1rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin: 0;
+}
+.section-card .card-desc {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.section-card .card-footer-inner {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--gray-200);
+}
+.section-card .card-footer-inner .btn-enter {
+  display: inline-block;
+  background: var(--black);
+  color: var(--white);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.3rem 0.75rem;
+  border: none;
+  border-radius: 0;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.section-card .card-footer-inner .btn-enter:hover {
+  background: var(--gray-800);
+  color: var(--white);
+}
+
+/* --- About Section (Digital Benin two-column) --- */
+.about-section {
+  padding: 3rem 0;
+  border-top: 1px solid var(--gray-900);
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding-left: var(--pad-x);
+  padding-right: var(--pad-x);
+}
+.about-section .about-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 1.5rem;
+}
+@media (min-width: 768px) {
+  .about-section .about-grid { grid-template-columns: 5fr 7fr; }
+}
+.about-section .about-image-col {
+  position: relative;
+}
+@media (min-width: 768px) {
+  .about-section .about-image-col {
+    position: sticky;
+    top: 5rem;
+    z-index: 1;
+  }
+}
+.about-section .about-image-col img {
+  width: 100%;
+  height: auto;
+  display: block;
+}
+.about-section .about-caption {
+  font-size: 0.8125rem;
+  color: var(--gray-600);
+  margin-top: 0.75rem;
+  line-height: 1.4;
+}
+.about-section .about-title {
+  font-size: 2rem;
+  font-weight: 800;
+  color: var(--gray-900);
+  line-height: 1;
+  margin-bottom: 1rem;
+  white-space: pre-line;
+}
+.about-section .about-text {
+  font-size: 1rem;
+  color: var(--gray-900);
+  line-height: 1.75;
+  white-space: pre-line;
+}
+.about-section .about-text a { color: var(--gray-900); text-decoration: underline; }
+.about-section .about-text a:hover { color: var(--primary); }
+.about-section .btn-about {
+  display: inline-block;
+  background: var(--black);
+  color: var(--white);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.35rem 0.85rem;
+  border: none;
+  border-radius: 0;
+  text-decoration: none;
+  margin-top: 1rem;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.about-section .btn-about:hover { background: var(--gray-800); color: var(--white); }
+
+/* --- Document Card (catalog) --- */
+.doc-card {
+  background: var(--white);
+  border: 1px solid var(--gray-300);
+  border-radius: 0;
+  overflow: hidden;
+  height: 100%;
+  transition: box-shadow 0.25s ease;
+  display: flex;
+  flex-direction: column;
+  text-decoration: none;
+  color: inherit;
+}
+.doc-card:hover {
+  box-shadow: 0 0.125rem 0.25rem rgba(0,0,0,0.25);
+  color: inherit;
+  text-decoration: none;
+}
+.doc-card .doc-thumb {
+  position: relative;
+  overflow: hidden;
+  background: var(--primary-light);
+}
+.doc-card .doc-thumb img {
+  width: 100%;
+  aspect-ratio: 1;
+  object-fit: cover;
+  object-position: center 40%;
+  display: block;
+  filter: invert(1);
+}
+.doc-card .doc-thumb .doc-thumb-placeholder {
+  width: 100%;
+  aspect-ratio: 1;
+  display: grid;
+  place-items: center;
+  font-size: 3rem;
+  filter: invert(1);
+  opacity: 0.5;
+}
+.doc-card .doc-body {
+  padding: 0;
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+}
+.doc-card .doc-body .list-item {
+  padding: 0.5rem 1.25rem;
+  border-bottom: 1px solid var(--gray-200);
+}
+.doc-card .doc-body .list-item:last-child { border-bottom: none; flex: 1; }
+.doc-card .doc-title {
+  font-size: 1.05rem;
+  font-weight: 600;
+  color: var(--gray-900);
+  margin: 0;
+  display: -webkit-box;
+  -webkit-line-clamp: 3;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.doc-card .doc-desc {
+  font-size: 0.875rem;
+  color: var(--gray-600);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.doc-card .doc-meta {
+  font-size: 0.8125rem;
+  color: var(--gray-600);
+  font-weight: 500;
+}
+.doc-card .doc-footer {
+  padding: 0.75rem 1.25rem;
+  border-top: 1px solid var(--gray-200);
+}
+.doc-card .doc-footer .btn-enter {
+  display: inline-block;
+  background: var(--black);
+  color: var(--white);
+  font-size: 0.85rem;
+  font-weight: 500;
+  padding: 0.3rem 0.75rem;
+  border: none;
+  border-radius: 0;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.doc-card .doc-footer .btn-enter:hover { background: var(--gray-800); color: var(--white); }
+
+/* --- Catalog page section cover --- */
+.section-cover {
+  min-height: 50vh;
+  display: flex;
+  align-items: flex-end;
+  padding: 5rem var(--pad-x) 3rem;
+  position: relative;
+  overflow: hidden;
+  background-color: #2a2210;
+  background-image:
+    linear-gradient(to top, rgba(0,0,0,0.72) 0%, rgba(0,0,0,0.35) 40%, rgba(0,0,0,0.10) 100%),
+    url('/catalogo-bg.png');
+  background-size: cover;
+  background-position: center 15%;
+  background-repeat: no-repeat;
+}
+.section-cover .cover-inner {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  width: 100%;
+  position: relative;
+  z-index: 1;
+}
+.section-cover .cover-label {
+  font-size: 0.8125rem;
+  text-transform: uppercase;
+  letter-spacing: 0.2em;
+  font-weight: 700;
+  color: var(--white);
+  margin-bottom: 0.75rem;
+}
+.section-cover .cover-title {
+  font-size: clamp(2.2rem, 5vw, 3.8rem);
+  font-weight: 800;
+  line-height: 0.95;
+  letter-spacing: -0.025em;
+  color: var(--white);
+  margin-bottom: 1rem;
+}
+.section-cover .cover-desc {
+  font-size: clamp(0.95rem, 1.4vw, 1.15rem);
+  color: rgba(255,255,255,0.75);
+  max-width: 60ch;
+  line-height: 1.6;
+}
+
+/* --- Catalog destacado: bibliographic reference --- */
+.section-cover .cover-referencia {
+  margin-top: 1.5rem;
+  padding-top: 1.25rem;
+  border-top: 1px solid rgba(255,255,255,0.2);
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  max-width: 55ch;
+}
+.section-cover .ref-icon {
+  font-size: 1.1rem;
+  flex-shrink: 0;
+  line-height: 1.5;
+}
+.section-cover .ref-cita {
+  display: block;
+  font-family: var(--font-serif);
+  font-size: clamp(0.9rem, 1.2vw, 1.05rem);
+  color: rgba(255,255,255,0.85);
+  line-height: 1.6;
+  font-style: normal;
+}
+.section-cover .ref-cita em {
+  font-style: italic;
+  color: rgba(255,255,255,0.95);
+}
+
+/* --- Catalog destacado: CTA link --- */
+.section-cover .cover-cta {
+  display: inline-block;
+  margin-top: 1.5rem;
+  background: var(--primary);
+  color: var(--white);
+  font-size: 0.85rem;
+  font-weight: 600;
+  padding: 0.5rem 1.4rem;
+  border: none;
+  border-radius: 0;
+  text-decoration: none;
+  cursor: pointer;
+  transition: background 0.15s;
+}
+.section-cover .cover-cta:hover {
+  background: var(--primary-dark);
+  color: var(--white);
+}
+
+/* --- Tags & Badges --- */
+.badge-tag {
+  display: inline-flex;
+  align-items: center;
+  font-size: 0.65rem;
+  text-transform: uppercase;
+  letter-spacing: 0.1em;
+  font-weight: 700;
+  padding: 0.2rem 0.55rem;
+  border-radius: 0;
+  white-space: nowrap;
+  color: var(--white);
+  background: var(--gray-800);
+}
+.badge-tag.amber { background: var(--primary); color: var(--white); }
+.badge-tag.custom { color: var(--white); }
+
+/* --- Data table --- */
+.data-table-wrap { overflow-x: auto; margin: 1.5rem 0; }
+.data-table { width: 100%; border-collapse: collapse; font-size: 0.875rem; }
+.data-table th { text-align: left; padding: 0.5rem 0.75rem; background: var(--gray-100); color: var(--gray-600); font-weight: 600; font-size: 0.75rem; text-transform: uppercase; letter-spacing: 0.15em; border-bottom: 2px solid var(--gray-300); }
+.data-table td { padding: 0.5rem 0.75rem; border-bottom: 1px solid var(--gray-200); color: var(--gray-600); }
+.data-table tr:hover td { color: var(--gray-900); background: var(--gray-100); }
+
+/* --- Grain overlay (Digital Benin doesn't have grain but we keep it subtle) --- */
+.grain-overlay { position: fixed; inset: 0; z-index: 999; pointer-events: none; opacity: 0.025; mix-blend-mode: overlay; }
+.grain-overlay svg { width: 100%; height: 100%; }
+
+/* --- Footer (Digital Benin exact: bg-black, text-light, small) --- */
+.footer {
+  margin-top: auto;
+  padding-top: 3rem;
+}
+.footer-inner {
+  background: var(--black);
+  color: var(--gray-500);
+  font-size: 0.875rem;
+  padding: 1.5rem 0;
+}
+.footer-grid {
+  max-width: var(--max-w);
+  margin: 0 auto;
+  padding: 1.5rem var(--pad-x);
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 2rem;
+}
+@media (min-width: 768px) {
+  .footer-grid { grid-template-columns: 3fr 2fr 2fr 2fr 3fr; }
+}
+.footer-brand img {
+  max-width: 200px;
+  padding: 1rem 0 1.5rem 0;
+  filter: brightness(0) invert(1);
+}
+.footer-col-title {
+  color: var(--white);
+  font-weight: 700;
+  margin-bottom: 1rem;
+  font-size: 0.875rem;
+}
+.footer-col a {
+  display: block;
+  color: var(--gray-500);
+  text-decoration: none;
+  padding: 0.15rem 0;
+  font-size: 0.875rem;
+  transition: color 0.15s;
+}
+.footer-col a:hover { color: var(--white); }
+.footer-back-to-top {
+  text-align: center;
+  cursor: pointer;
+  padding-top: 1rem;
+}
+.footer-back-to-top:hover { color: var(--white); }
+.footer-back-to-top .back-icon {
+  display: block;
+  margin: 0 auto 0.75rem;
+  font-size: 1.5rem;
+}
+.footer-back-to-top .back-label {
+  font-weight: 700;
+  color: var(--gray-500);
+  font-size: 0.875rem;
+}
+.footer-back-to-top:hover .back-label { color: var(--white); }
+
+/* --- Fade in animation --- */
+.fade-in { opacity: 0; transform: translateY(20px); transition: opacity 0.6s ease, transform 0.6s ease; }
+.fade-in.visible { opacity: 1; transform: translateY(0); }
+@media (prefers-reduced-motion: reduce) { .fade-in { opacity: 1; transform: none; transition: none; } }
+
+/* --- Focus --- */
+a:focus-visible, button:focus-visible { outline: 2px solid var(--primary); outline-offset: 2px; }
+
+/* --- Scrollbar --- */
+::-webkit-scrollbar { width: 6px; }
+::-webkit-scrollbar-thumb { background: var(--gray-400); border-radius: 3px; }
+::-webkit-scrollbar-track { background: transparent; }
+
+/* --- Responsive --- */
+@media (max-width: 600px) {
+  .explore-title { font-size: 1.75rem; }
+  .about-section .about-title { font-size: 1.5rem; }
+}
+
+/* --- Active underline (Digital Benin nav) --- */
+.active-underline, .underline {
+  text-decoration: none;
+  cursor: pointer;
+  padding-bottom: 4px;
+  border-radius: 0;
+}
+.active-underline.active, .underline {
+  border-bottom: 2px solid var(--primary);
+}
+.navbar .active-underline:not(.active):hover {
+  border-bottom: 2px solid var(--white);
+  transition: 0.1s ease;
+}
+
+/* --- Hover highlight --- */
+.div-hover:hover { background: rgba(0,0,0,0.04) !important; }
+.div-hover-bronze:hover { background: var(--primary-hover) !important; }
+
+/* --- Ellipsis utilities --- */
+.ellipsis-4-rows {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.two-rows-description {
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+
+/* --- Link primary (Digital Benin) --- */
+.link-primary { color: var(--primary) !important; }
+.link-primary:hover { color: var(--primary-dark) !important; }

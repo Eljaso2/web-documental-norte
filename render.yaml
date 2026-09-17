@@ -1,0 +1,15 @@
+services:
+  - type: web
+    name: web-documental-norte
+    runtime: node
+    plan: starter
+    rootDir: .
+    buildCommand: npm install --workspace=web && npm run build --workspace=web
+    startCommand: HOSTNAME=0.0.0.0 node web/.next/standalone/web-documental/web/server.js
+    envVars:
+      - key: NEXT_PUBLIC_SANITY_PROJECT_ID
+        value: 06aqvaal
+      - key: NEXT_PUBLIC_SANITY_DATASET
+        value: production
+      - key: NODE_VERSION
+        value: "20"

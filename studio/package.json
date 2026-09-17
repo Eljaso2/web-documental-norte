@@ -1,0 +1,20 @@
+{
+  "name": "studio",
+  "version": "1.0.0",
+  "private": true,
+  "scripts": {
+    "dev": "sanity dev",
+    "build": "sanity build",
+    "deploy": "sanity deploy"
+  },
+  "dependencies": {
+    "@sanity/client": "^7.27.0",
+    "@sanity/vision": "^3.0.0",
+    "sanity": "^3.0.0",
+    "styled-components": "^6.5.3",
+    "tsx": "^4.23.13"
+  },
+  "devDependencies": {
+    "typescript": "^5.0.0"
+  }
+}

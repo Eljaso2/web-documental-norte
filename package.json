@@ -1,0 +1,15 @@
+{
+  "name": "web-documental-norte",
+  "version": "1.0.0",
+  "private": true,
+  "workspaces": [
+    "studio",
+    "web"
+  ],
+  "scripts": {
+    "dev:studio": "npm run dev --workspace=studio",
+    "dev:web": "npm run dev --workspace=web",
+    "build:studio": "npm run build --workspace=studio",
+    "build:web": "npm run build --workspace=web"
+  }
+}
