@@ -143,10 +143,10 @@ export function HomeClient({ counts, hero }: HomeClientProps) {
             </p>
             {(doc.destacadoRefAutor || doc.destacadoRefObra) && (
               <p className="hero-featured-ref">
-                {doc.destacadoRefAutor && <>{doc.destacadoRefAutor}, </>}
+                Para saber más sobre este documento, seguí leyendo{' '}
                 {doc.destacadoRefObra && <em>{doc.destacadoRefObra}</em>}
-                {doc.destacadoRefAnio && <>, {doc.destacadoRefAnio}</>}
-                {doc.destacadoRefPaginas && <>, {doc.destacadoRefPaginas}</>}
+                {doc.destacadoRefAutor && <> de {doc.destacadoRefAutor}</>}
+                {doc.destacadoRefPaginas && <> ({doc.destacadoRefPaginas})</>}
               </p>
             )}
             <Link href={`/documento/${doc.slug.current}`} className="hero-featured-btn">
