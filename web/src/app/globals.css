@@ -299,6 +299,16 @@ img { max-width: 100%; height: auto; }
   line-height: 1.65;
   margin-bottom: 1rem;
 }
+.hero-featured-ref {
+  font-size: 0.8rem;
+  color: #a08841;
+  line-height: 1.5;
+  margin-bottom: 1rem;
+  max-width: 60ch;
+}
+.hero-featured-ref em {
+  font-style: italic;
+}
 .hero-featured-btn {
   display: inline-block;
   background: #a08841;

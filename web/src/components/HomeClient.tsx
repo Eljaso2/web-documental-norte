@@ -17,6 +17,10 @@ interface HeroData {
     destacadoVolanta?: string
     destacadoTitulo?: string
     destacadoBajada?: string
+    destacadoRefAutor?: string
+    destacadoRefObra?: string
+    destacadoRefAnio?: string
+    destacadoRefPaginas?: string
     imagenPortada?: {
       asset?: { _id: string; url: string; metadata?: { dimensions?: { width: number; height: number } } }
     }
@@ -137,6 +141,14 @@ export function HomeClient({ counts, hero }: HomeClientProps) {
             <p className="hero-featured-bajada">
               {doc.destacadoBajada || doc.descripcion}
             </p>
+            {(doc.destacadoRefAutor || doc.destacadoRefObra) && (
+              <p className="hero-featured-ref">
+                {doc.destacadoRefAutor && <>{doc.destacadoRefAutor}, </>}
+                {doc.destacadoRefObra && <em>{doc.destacadoRefObra}</em>}
+                {doc.destacadoRefAnio && <>, {doc.destacadoRefAnio}</>}
+                {doc.destacadoRefPaginas && <>, {doc.destacadoRefPaginas}</>}
+              </p>
+            )}
             <Link href={`/documento/${doc.slug.current}`} className="hero-featured-btn">
               Explorá este documento
             </Link>

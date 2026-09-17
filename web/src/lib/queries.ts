@@ -89,6 +89,7 @@ export const SITE_SETTINGS = `*[_id == "site-settings"][0] {
   "destacadoDocumento": destacadoDocumento->{
     _id, titulo, slug, descripcion,
     destacadoVolanta, destacadoTitulo, destacadoBajada,
+    destacadoRefAutor, destacadoRefObra, destacadoRefAnio, destacadoRefPaginas,
     "imagenPortada": imagenPortada{ asset->{ _id, url, metadata { dimensions } } },
     "archivos": archivos[]{ asset->{ _id, url, metadata { dimensions }, mimeType } }
   },
