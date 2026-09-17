@@ -256,6 +256,7 @@ img { max-width: 100%; height: auto; }
   width: 100%;
   min-height: 73.5vh;
   position: relative;
+  z-index: 101;
   background-color: #f8f9fa;
   overflow: visible;
   display: flex;
