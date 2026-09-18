@@ -4,6 +4,9 @@ export default defineType({
   name: 'documento',
   title: 'Documento',
   type: 'document',
+  groups: [
+    { name: 'narrativa', title: 'Narrativa del documento', icon: () => '📖' },
+  ],
   fields: [
     // === BLOQUE 1: IDENTIFICACION (ISAD-G) ===
     defineField({
@@ -157,49 +160,56 @@ export default defineType({
       of: [{ type: 'actorConRol' }],
       description: 'Personas u organizaciones con rol en la producción o contenido del documento',
     }),
-    // === PRESENTACIÓN PARA DESTACADO ===
+    // === NARRATIVA DEL DOCUMENTO ===
     defineField({
       name: 'destacadoVolanta',
-      title: 'Volanta del destacado',
+      title: 'Volanta',
       type: 'string',
+      group: 'narrativa',
       description: 'Texto chico arriba del título cuando el documento se destaca (ej: "Archivo destacado", "Fuentes primarias").',
       initialValue: 'Archivo destacado',
     }),
     defineField({
       name: 'destacadoTitulo',
-      title: 'Título del destacado',
+      title: 'Título para destacar',
       type: 'string',
+      group: 'narrativa',
       description: 'Título narrativo para cuando el documento se destaca. Si queda vacío, usa el título del documento.',
     }),
     defineField({
       name: 'destacadoBajada',
-      title: 'Bajada del destacado',
+      title: 'Bajada',
       type: 'text',
       rows: 5,
+      group: 'narrativa',
       description: 'Descripción narrativa cuando el documento se destaca. Si queda vacía, usa la descripción ISAD-G.',
     }),
     defineField({
       name: 'destacadoRefAutor',
       title: 'Para saber más — Autor',
       type: 'string',
+      group: 'narrativa',
       description: 'Autor de la obra fuente (ej: "Gori, Gastón").',
     }),
     defineField({
       name: 'destacadoRefObra',
       title: 'Para saber más — Obra',
       type: 'string',
+      group: 'narrativa',
       description: 'Título de la obra fuente (ej: "La Forestal: la tragedia del quebracho colorado").',
     }),
     defineField({
       name: 'destacadoRefAnio',
       title: 'Para saber más — Año',
       type: 'string',
+      group: 'narrativa',
       description: 'Año de publicación (ej: "1965", "c. 1964").',
     }),
     defineField({
       name: 'destacadoRefPaginas',
       title: 'Para saber más — Página/s',
       type: 'string',
+      group: 'narrativa',
       description: 'Página o rango de páginas (ej: "p. 45", "pp. 45-52").',
     }),
     // Digital assets

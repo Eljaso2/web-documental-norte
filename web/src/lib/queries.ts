@@ -25,6 +25,7 @@ export const ALL_DOCUMENTOS = `*[_type == "documento"] | order(fecha.fechaInicio
   "regiones": regiones[]->{ _id, titulo, slug },
   "localidades": localidades[]->{ _id, titulo, slug, "region": region->{ _id, titulo, slug } },
   "temas": temas[]->{ _id, titulo, slug },
+  "entesProductores": entesProductores[]{ rol, "actor": actor->{ _id, nombre, tipoActor } },
   "imagenPortada": imagenPortada{ asset->{ _id, url, metadata { dimensions } } },
   "archivos": archivos[0]{ asset->{ _id, url, metadata { dimensions } } }
 }`

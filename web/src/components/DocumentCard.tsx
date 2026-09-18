@@ -17,6 +17,14 @@ interface DocumentCardProps {
       slug: string
       color?: string
     }>
+    entesProductores?: Array<{
+      rol?: string
+      actor?: {
+        _id: string
+        nombre: string
+        tipoActor?: string
+      }
+    }>
     periodos?: Array<{
       _id: string
       titulo: string
@@ -78,9 +86,11 @@ export function DocumentCard({ documento }: DocumentCardProps) {
 
           {/* Description + meta */}
           <div className="list-item">
-            {dateDisplay && (
+            {(dateDisplay || documento.entesProductores?.length) && (
               <div className="doc-meta" style={{ marginBottom: '0.25rem' }}>
-                {circa}{dateDisplay}
+                {dateDisplay && <>{circa}{dateDisplay}</>}
+                {documento.entesProductores?.length && dateDisplay && ' · '}
+                {documento.entesProductores?.map(e => e.actor?.nombre).filter(Boolean).join(', ')}
               </div>
             )}
             {documento.descripcion && (
