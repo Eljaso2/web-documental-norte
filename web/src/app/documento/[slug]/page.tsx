@@ -414,6 +414,8 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
               const embedUrl = getEmbedUrl(enlace.url, enlace.plataforma)
 
               if (embedUrl) {
+                const plataformaLabel = enlace.plataforma === 'youtube' ? 'YouTube' : enlace.plataforma === 'vimeo' ? 'Vimeo' : 'sitio externo'
+
                 return (
                   <div key={i} style={{ marginBottom: '1.5rem' }}>
                     {enlace.titulo && (
@@ -430,6 +432,18 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
                         title={enlace.titulo || 'Video embebido'}
                       />
                     </div>
+                    <a
+                      href={enlace.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                        marginTop: '0.5rem', fontSize: '0.82rem', fontWeight: 500,
+                        color: '#a08841', textDecoration: 'none',
+                      }}
+                    >
+                      🔗 Ver en {plataformaLabel}
+                    </a>
                   </div>
                 )
               }
