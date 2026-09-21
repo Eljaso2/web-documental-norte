@@ -123,8 +123,10 @@ function getHeroImageUrl(hero: HeroData): string | null {
   if (firstPdf?.asset?.url) {
     return `${firstPdf.asset.url}?w=900&h=1260&fit=crop`
   }
-  // 5. YouTube thumbnail
-  const yt = doc?.enlacesAudiovisuales?.find(e => e.plataforma === 'youtube')
+  // 5. YouTube thumbnail (auto-detect from URL)
+  const yt = doc?.enlacesAudiovisuales?.find(e => {
+    return /(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/.test(e.url)
+  })
   if (yt) {
     const match = yt.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/)
     if (match) return `https://img.youtube.com/vi/${match[1]}/maxresdefault.jpg`

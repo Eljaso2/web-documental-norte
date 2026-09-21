@@ -1,12 +1,13 @@
 import Link from 'next/link'
 
-/** Extract YouTube thumbnail URL from an enlace */
+/** Extract YouTube thumbnail URL from enlaces (auto-detect from URL) */
 function getYtThumbnail(enlaces: Array<{ url: string; plataforma?: string }> | undefined): string | null {
   if (!enlaces?.length) return null
-  const yt = enlaces.find(e => e.plataforma === 'youtube')
-  if (!yt) return null
-  const match = yt.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/)
-  return match ? `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg` : null
+  for (const e of enlaces) {
+    const match = e.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/)
+    if (match) return `https://img.youtube.com/vi/${match[1]}/hqdefault.jpg`
+  }
+  return null
 }
 
 interface DocumentCardProps {

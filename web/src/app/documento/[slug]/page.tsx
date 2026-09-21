@@ -4,17 +4,15 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { RawDataPanel } from '@/components/RawDataPanel'
 
-/** Convert an external URL to an embeddable iframe URL */
-function getEmbedUrl(url: string, plataforma: string): string | null {
-  if (plataforma === 'youtube') {
-    const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/)
-    return match ? `https://www.youtube.com/embed/${match[1]}` : null
-  }
-  if (plataforma === 'vimeo') {
-    const match = url.match(/vimeo\.com\/(\d+)/)
-    return match ? `https://player.vimeo.com/video/${match[1]}` : null
-  }
-  return null // "otra" → no auto-embed
+/** Auto-detect embed URL from any external URL (YouTube, Vimeo, etc.) */
+function getEmbedInfo(url: string): { embedUrl: string; label: string } | null {
+  // YouTube
+  const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/)
+  if (ytMatch) return { embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}`, label: 'YouTube' }
+  // Vimeo
+  const vimeoMatch = url.match(/vimeo\.com\/(\d+)/)
+  if (vimeoMatch) return { embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}`, label: 'Vimeo' }
+  return null
 }
 
 export const revalidate = 60
@@ -411,11 +409,9 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
           <div style={{ marginBottom: '2rem' }}>
             <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, color: '#a08841', marginBottom: '0.6rem' }}>Audiovisual</div>
             {doc.enlacesAudiovisuales.map((enlace: any, i: number) => {
-              const embedUrl = getEmbedUrl(enlace.url, enlace.plataforma)
+              const embedInfo = getEmbedInfo(enlace.url)
 
-              if (embedUrl) {
-                const plataformaLabel = enlace.plataforma === 'youtube' ? 'YouTube' : enlace.plataforma === 'vimeo' ? 'Vimeo' : 'sitio externo'
-
+              if (embedInfo) {
                 return (
                   <div key={i} style={{ marginBottom: '1.5rem' }}>
                     {enlace.titulo && (
@@ -425,7 +421,7 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
                     )}
                     <div style={{ background: '#f8f9fa', border: '1px solid #dee2e6', overflow: 'hidden', position: 'relative', paddingBottom: '56.25%', height: 0 }}>
                       <iframe
-                        src={embedUrl}
+                        src={embedInfo.embedUrl}
                         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
                         allowFullScreen
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
@@ -442,7 +438,7 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
                         color: '#a08841', textDecoration: 'none',
                       }}
                     >
-                      🔗 Ver en {plataformaLabel}
+                      🔗 Ver en {embedInfo.label}
                     </a>
                   </div>
                 )
