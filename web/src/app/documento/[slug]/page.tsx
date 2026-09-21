@@ -4,15 +4,22 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { RawDataPanel } from '@/components/RawDataPanel'
 
-/** Auto-detect embed URL from any external URL (YouTube, Vimeo, etc.) */
-function getEmbedInfo(url: string): { embedUrl: string; label: string } | null {
+/** Detect how to embed an external URL */
+function getEmbedInfo(url: string): { type: 'youtube' | 'vimeo' | 'video' | 'audio' | 'iframe'; embedUrl: string; label: string } | null {
   // YouTube
   const ytMatch = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/)
-  if (ytMatch) return { embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}`, label: 'YouTube' }
+  if (ytMatch) return { type: 'youtube', embedUrl: `https://www.youtube.com/embed/${ytMatch[1]}`, label: 'YouTube' }
   // Vimeo
   const vimeoMatch = url.match(/vimeo\.com\/(\d+)/)
-  if (vimeoMatch) return { embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}`, label: 'Vimeo' }
-  return null
+  if (vimeoMatch) return { type: 'vimeo', embedUrl: `https://player.vimeo.com/video/${vimeoMatch[1]}`, label: 'Vimeo' }
+  // Direct video file
+  if (/\.(mp4|webm|ogg|mov|m4v)(&|$|\?)/i.test(url) || /\.(mp4|webm|ogg|mov|m4v)$/i.test(url))
+    return { type: 'video', embedUrl: url, label: new URL(url).hostname }
+  // Direct audio file
+  if (/\.(mp3|wav|ogg|m4a|aac|flac)(&|$|\?)/i.test(url) || /\.(mp3|wav|ogg|m4a|aac|flac)$/i.test(url))
+    return { type: 'audio', embedUrl: url, label: new URL(url).hostname }
+  // Generic iframe fallback — try to embed the page itself
+  return { type: 'iframe', embedUrl: url, label: new URL(url).hostname }
 }
 
 export const revalidate = 60
@@ -411,55 +418,59 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
             {doc.enlacesAudiovisuales.map((enlace: any, i: number) => {
               const embedInfo = getEmbedInfo(enlace.url)
 
-              if (embedInfo) {
-                return (
-                  <div key={i} style={{ marginBottom: '1.5rem' }}>
-                    {enlace.titulo && (
-                      <div style={{ fontSize: '0.92rem', color: '#495057', fontWeight: 600, marginBottom: '0.5rem' }}>
-                        {enlace.titulo}
-                      </div>
-                    )}
+              return (
+                <div key={i} style={{ marginBottom: '1.5rem' }}>
+                  {enlace.titulo && (
+                    <div style={{ fontSize: '0.92rem', color: '#495057', fontWeight: 600, marginBottom: '0.5rem' }}>
+                      {enlace.titulo}
+                    </div>
+                  )}
+
+                  {/* Video file (direct .mp4/.webm/.mov etc.) */}
+                  {embedInfo?.type === 'video' && (
+                    <div style={{ background: '#f8f9fa', border: '1px solid #dee2e6', overflow: 'hidden' }}>
+                      <video controls preload="metadata" style={{ width: '100%', maxHeight: '80vh', display: 'block' }}>
+                        <source src={embedInfo.embedUrl} />
+                        Tu navegador no soporta video HTML5.
+                      </video>
+                    </div>
+                  )}
+
+                  {/* Audio file (direct .mp3/.wav etc.) */}
+                  {embedInfo?.type === 'audio' && (
+                    <div style={{ background: '#f8f9fa', border: '1px solid #dee2e6', padding: '1.4rem' }}>
+                      <audio controls preload="metadata" style={{ width: '100%' }}>
+                        <source src={embedInfo.embedUrl} />
+                        Tu navegador no soporta audio HTML5.
+                      </audio>
+                    </div>
+                  )}
+
+                  {/* YouTube / Vimeo / generic iframe */}
+                  {(embedInfo?.type === 'youtube' || embedInfo?.type === 'vimeo' || embedInfo?.type === 'iframe') && (
                     <div style={{ background: '#f8f9fa', border: '1px solid #dee2e6', overflow: 'hidden', position: 'relative', paddingBottom: '56.25%', height: 0 }}>
                       <iframe
                         src={embedInfo.embedUrl}
                         style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
                         allowFullScreen
                         allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
-                        title={enlace.titulo || 'Video embebido'}
+                        title={enlace.titulo || 'Contenido embebido'}
                       />
                     </div>
-                    <a
-                      href={enlace.url}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      style={{
-                        display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                        marginTop: '0.5rem', fontSize: '0.82rem', fontWeight: 500,
-                        color: '#a08841', textDecoration: 'none',
-                      }}
-                    >
-                      🔗 Ver en {embedInfo.label}
-                    </a>
-                  </div>
-                )
-              }
+                  )}
 
-              // "otra" plataforma — link externo
-              return (
-                <div key={i} style={{ marginBottom: '0.8rem' }}>
+                  {/* Source link — always shown */}
                   <a
                     href={enlace.url}
                     target="_blank"
                     rel="noopener noreferrer"
                     style={{
                       display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
-                      fontSize: '0.88rem', fontWeight: 500,
+                      marginTop: '0.5rem', fontSize: '0.82rem', fontWeight: 500,
                       color: '#a08841', textDecoration: 'none',
-                      background: '#f8f9fa', border: '1px solid #dee2e6',
-                      padding: '0.8rem 1.2rem',
                     }}
                   >
-                    🔗 {enlace.titulo || enlace.url}
+                    🔗 Ver en {embedInfo?.label || 'sitio original'}
                   </a>
                 </div>
               )
