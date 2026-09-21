@@ -27,6 +27,10 @@ interface HeroData {
     archivos?: Array<{
       asset?: { _id: string; url: string; metadata?: { dimensions?: { width: number; height: number }; mimeType?: string } }
     }>
+    enlacesAudiovisuales?: Array<{
+      url: string
+      plataforma?: string
+    }>
   }
 }
 
@@ -94,7 +98,7 @@ const sections = [
   },
 ]
 
-/* Resolve hero image URL — priority: destacadoImagen (siteSettings, color-treated) > imagenPortada > first image in archivos > first PDF */
+/* Resolve hero image URL — priority: destacadoImagen > imagenPortada > first image in archivos > first PDF > YouTube thumbnail */
 function getHeroImageUrl(hero: HeroData): string | null {
   // 1. Custom destacadoImagen from siteSettings (color-treated, HIGHEST priority)
   if (hero.destacadoImagen?.asset?.url) {
@@ -118,6 +122,12 @@ function getHeroImageUrl(hero: HeroData): string | null {
   )
   if (firstPdf?.asset?.url) {
     return `${firstPdf.asset.url}?w=900&h=1260&fit=crop`
+  }
+  // 5. YouTube thumbnail
+  const yt = doc?.enlacesAudiovisuales?.find(e => e.plataforma === 'youtube')
+  if (yt) {
+    const match = yt.url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/)
+    if (match) return `https://img.youtube.com/vi/${match[1]}/maxresdefault.jpg`
   }
   return null
 }

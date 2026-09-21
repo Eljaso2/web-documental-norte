@@ -4,6 +4,19 @@ import { notFound } from 'next/navigation'
 import Link from 'next/link'
 import { RawDataPanel } from '@/components/RawDataPanel'
 
+/** Convert an external URL to an embeddable iframe URL */
+function getEmbedUrl(url: string, plataforma: string): string | null {
+  if (plataforma === 'youtube') {
+    const match = url.match(/(?:youtube\.com\/(?:watch\?v=|embed\/)|youtu\.be\/)([\w-]{11})/)
+    return match ? `https://www.youtube.com/embed/${match[1]}` : null
+  }
+  if (plataforma === 'vimeo') {
+    const match = url.match(/vimeo\.com\/(\d+)/)
+    return match ? `https://player.vimeo.com/video/${match[1]}` : null
+  }
+  return null // "otra" → no auto-embed
+}
+
 export const revalidate = 60
 
 export async function generateStaticParams() {
@@ -265,8 +278,11 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
             {doc.archivos.map((archivo: any, i: number) => {
               const url = archivo.asset?.url
               if (!url) return null
-              const isImage = archivo.asset?.metadata?.dimensions
-              const isPdf = url.endsWith('.pdf') || archivo.asset?.originalFilename?.endsWith('.pdf')
+              const mimeType = archivo.asset?.metadata?.mimeType || ''
+              const isImage = archivo.asset?.metadata?.dimensions && mimeType.startsWith('image/')
+              const isPdf = mimeType === 'application/pdf' || url.endsWith('.pdf') || archivo.asset?.originalFilename?.endsWith('.pdf')
+              const isVideo = mimeType.startsWith('video/') || /\.(mp4|webm|ogg|mov)$/i.test(url)
+              const isAudio = mimeType.startsWith('audio/') || /\.(mp3|ogg|wav|m4a|aac|flac)$/i.test(url)
 
               if (isImage) {
                 return (
@@ -308,6 +324,65 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
                 )
               }
 
+              if (isVideo) {
+                return (
+                  <div key={i} style={{ marginBottom: '1.5rem' }}>
+                    <div style={{ background: '#f8f9fa', border: '1px solid #dee2e6', overflow: 'hidden' }}>
+                      <video
+                        controls
+                        preload="metadata"
+                        style={{ width: '100%', maxHeight: '80vh', display: 'block' }}
+                      >
+                        <source src={url} type={mimeType || undefined} />
+                        Tu navegador no soporta video HTML5.
+                      </video>
+                    </div>
+                    <a
+                      href={url}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                        marginTop: '0.6rem', fontSize: '0.85rem', fontWeight: 500,
+                        color: '#a08841', textDecoration: 'none',
+                      }}
+                    >
+                      🎬 Descargar {archivo.asset?.originalFilename || 'video'}
+                    </a>
+                  </div>
+                )
+              }
+
+              if (isAudio) {
+                return (
+                  <div key={i} style={{ marginBottom: '1rem' }}>
+                    <div style={{ background: '#f8f9fa', border: '1px solid #dee2e6', padding: '1.4rem' }}>
+                      <div style={{ fontSize: '0.85rem', color: '#495057', marginBottom: '0.6rem', fontWeight: 600 }}>
+                        🎵 {archivo.asset?.originalFilename || 'Audio'}
+                      </div>
+                      <audio controls preload="metadata" style={{ width: '100%' }}>
+                        <source src={url} type={mimeType || undefined} />
+                        Tu navegador no soporta audio HTML5.
+                      </audio>
+                    </div>
+                    <a
+                      href={url}
+                      download
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                        marginTop: '0.4rem', fontSize: '0.85rem', fontWeight: 500,
+                        color: '#a08841', textDecoration: 'none',
+                      }}
+                    >
+                      📥 Descargar {archivo.asset?.originalFilename || 'audio'}
+                    </a>
+                  </div>
+                )
+              }
+
               return (
                 <div key={i} style={{ marginBottom: '0.8rem' }}>
                   <a
@@ -324,6 +399,57 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
                     }}
                   >
                     📎 {archivo.asset?.originalFilename || 'Descargar archivo'}
+                  </a>
+                </div>
+              )
+            })}
+          </div>
+        )}
+
+        {/* External audiovisual (YouTube, Vimeo, etc.) */}
+        {doc.enlacesAudiovisuales?.length > 0 && (
+          <div style={{ marginBottom: '2rem' }}>
+            <div style={{ fontSize: '0.7rem', textTransform: 'uppercase', letterSpacing: '0.15em', fontWeight: 700, color: '#a08841', marginBottom: '0.6rem' }}>Audiovisual</div>
+            {doc.enlacesAudiovisuales.map((enlace: any, i: number) => {
+              const embedUrl = getEmbedUrl(enlace.url, enlace.plataforma)
+
+              if (embedUrl) {
+                return (
+                  <div key={i} style={{ marginBottom: '1.5rem' }}>
+                    {enlace.titulo && (
+                      <div style={{ fontSize: '0.92rem', color: '#495057', fontWeight: 600, marginBottom: '0.5rem' }}>
+                        {enlace.titulo}
+                      </div>
+                    )}
+                    <div style={{ background: '#f8f9fa', border: '1px solid #dee2e6', overflow: 'hidden', position: 'relative', paddingBottom: '56.25%', height: 0 }}>
+                      <iframe
+                        src={embedUrl}
+                        style={{ position: 'absolute', top: 0, left: 0, width: '100%', height: '100%', border: 'none' }}
+                        allowFullScreen
+                        allow="accelerometer; autoplay; clipboard-write; encrypted-media; gyroscope; picture-in-picture"
+                        title={enlace.titulo || 'Video embebido'}
+                      />
+                    </div>
+                  </div>
+                )
+              }
+
+              // "otra" plataforma — link externo
+              return (
+                <div key={i} style={{ marginBottom: '0.8rem' }}>
+                  <a
+                    href={enlace.url}
+                    target="_blank"
+                    rel="noopener noreferrer"
+                    style={{
+                      display: 'inline-flex', alignItems: 'center', gap: '0.4rem',
+                      fontSize: '0.88rem', fontWeight: 500,
+                      color: '#a08841', textDecoration: 'none',
+                      background: '#f8f9fa', border: '1px solid #dee2e6',
+                      padding: '0.8rem 1.2rem',
+                    }}
+                  >
+                    🔗 {enlace.titulo || enlace.url}
                   </a>
                 </div>
               )

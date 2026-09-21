@@ -227,6 +227,48 @@ export default defineType({
       of: [{ type: 'image' }, { type: 'file' }],
       description: 'Imágenes, PDFs, u otros archivos adjuntos al documento',
     }),
+    defineField({
+      name: 'enlacesAudiovisuales',
+      title: 'Audiovisual externo',
+      type: 'array',
+      of: [{
+        type: 'object',
+        fields: [
+          defineField({
+            name: 'url',
+            title: 'URL del video o audio',
+            type: 'url',
+            description: 'YouTube, Vimeo, o cualquier URL con reproductor embebible',
+            validation: (Rule: any) => Rule.required(),
+          }),
+          defineField({
+            name: 'titulo',
+            title: 'Título del recurso',
+            type: 'string',
+            description: 'Ej: "Documental Hacheronomas (1966)"',
+          }),
+          defineField({
+            name: 'plataforma',
+            title: 'Plataforma',
+            type: 'string',
+            options: {
+              list: [
+                { title: 'YouTube', value: 'youtube' },
+                { title: 'Vimeo', value: 'vimeo' },
+                { title: 'Otra (iframe genérico)', value: 'otra' },
+              ],
+            },
+          }),
+        ],
+        preview: {
+          select: { titulo: 'titulo', url: 'url', plataforma: 'plataforma' },
+          prepare({ titulo, url, plataforma }: { titulo?: string; url?: string; plataforma?: string }) {
+            return { title: titulo || url || 'Sin título', subtitle: plataforma || 'Externo' }
+          },
+        },
+      }],
+      description: 'Videos o audios alojados en plataformas externas (YouTube, Vimeo, etc.)',
+    }),
     // Access level
     defineField({
       name: 'nivelAcceso',

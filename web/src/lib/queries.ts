@@ -27,7 +27,8 @@ export const ALL_DOCUMENTOS = `*[_type == "documento"] | order(fecha.fechaInicio
   "temas": temas[]->{ _id, titulo, slug },
   "entesProductores": entesProductores[]{ rol, "actor": actor->{ _id, nombre, tipoActor } },
   "imagenPortada": imagenPortada{ asset->{ _id, url, metadata { dimensions } } },
-  "archivos": archivos[0]{ asset->{ _id, url, metadata { dimensions } } }
+  "archivos": archivos[0]{ asset->{ _id, url, metadata { dimensions } } },
+  "enlacesAudiovisuales": enlacesAudiovisuales[]{ url, plataforma }
 }`
 
 export const DOCUMENTO_BY_SLUG = `*[_type == "documento" && slug.current == $slug][0] {
@@ -43,7 +44,8 @@ export const DOCUMENTO_BY_SLUG = `*[_type == "documento" && slug.current == $slu
   historiaArchivistica,
   "formatosSalida": formatosSalida[]->{ _id, titulo, slug, icono },
   "actores": actores[]{ rol, rolDetalle, "actor": actor->{ _id, nombre, tipoActor, nombreAlternativo } },
-  "archivos": archivos[]{ asset->{ _id, url, originalFilename, metadata { dimensions } } },
+  "archivos": archivos[]{ asset->{ _id, url, originalFilename, metadata { dimensions, mimeType } } },
+  "enlacesAudiovisuales": enlacesAudiovisuales[]{ url, titulo, plataforma },
   nivelAcceso, transcripcion,
   "narrativa": narrativa->{ _id, titulo, slug, resumen },
   fuenteArchivo, referenciaArchivo,
@@ -92,7 +94,8 @@ export const SITE_SETTINGS = `*[_id == "site-settings"][0] {
     destacadoVolanta, destacadoTitulo, destacadoBajada,
     destacadoRefAutor, destacadoRefObra, destacadoRefAnio, destacadoRefPaginas,
     "imagenPortada": imagenPortada{ asset->{ _id, url, metadata { dimensions } } },
-    "archivos": archivos[]{ asset->{ _id, url, metadata { dimensions }, mimeType } }
+    "archivos": archivos[]{ asset->{ _id, url, metadata { dimensions }, mimeType } },
+    "enlacesAudiovisuales": enlacesAudiovisuales[]{ url, plataforma }
   },
   catalogoDestacadoTitulo,
   catalogoDestacadoBajada,
