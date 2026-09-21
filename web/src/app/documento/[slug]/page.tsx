@@ -446,8 +446,8 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
                     </div>
                   )}
 
-                  {/* YouTube / Vimeo / generic iframe */}
-                  {(embedInfo?.type === 'youtube' || embedInfo?.type === 'vimeo' || embedInfo?.type === 'iframe') && (
+                  {/* YouTube / Vimeo → iframe embebido */}
+                  {(embedInfo?.type === 'youtube' || embedInfo?.type === 'vimeo') && (
                     <div style={{ background: '#f8f9fa', border: '1px solid #dee2e6', overflow: 'hidden', position: 'relative', paddingBottom: '56.25%', height: 0 }}>
                       <iframe
                         src={embedInfo.embedUrl}
@@ -457,6 +457,42 @@ export default async function DocumentoPage({ params }: { params: Promise<{ slug
                         title={enlace.titulo || 'Contenido embebido'}
                       />
                     </div>
+                  )}
+
+                  {/* Generic URL → card visual con botón (los sitios suelen bloquear iframes) */}
+                  {embedInfo?.type === 'iframe' && (
+                    <a
+                      href={enlace.url}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      style={{
+                        display: 'block', textDecoration: 'none', color: 'inherit',
+                        background: '#f8f9fa', border: '1px solid #dee2e6',
+                        position: 'relative', paddingBottom: '56.25%', overflow: 'hidden',
+                      }}
+                    >
+                      <div style={{
+                        position: 'absolute', inset: 0,
+                        display: 'flex', flexDirection: 'column', alignItems: 'center', justifyContent: 'center',
+                        background: 'linear-gradient(135deg, #1a1a1a 0%, #2d2d2d 100%)',
+                        color: '#fff',
+                      }}>
+                        <div style={{
+                          width: '4rem', height: '4rem', borderRadius: '50%',
+                          background: 'rgba(255,255,255,0.12)', display: 'flex',
+                          alignItems: 'center', justifyContent: 'center',
+                          fontSize: '1.6rem', marginBottom: '0.8rem',
+                        }}>
+                          ▶
+                        </div>
+                        <div style={{ fontSize: '0.92rem', fontWeight: 600, marginBottom: '0.3rem' }}>
+                          {enlace.titulo || 'Ver contenido externo'}
+                        </div>
+                        <div style={{ fontSize: '0.75rem', color: 'rgba(255,255,255,0.6)' }}>
+                          {embedInfo.label}
+                        </div>
+                      </div>
+                    </a>
                   )}
 
                   {/* Source link — always shown */}
